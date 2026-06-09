@@ -11,6 +11,14 @@
 
 ---
 
+## 2026-06-09 — 接入 Render 公网部署配置
+
+**做了什么：** 为公网部署（Render 免费 Web Service）补齐配置：`requirements.txt` 加 `gunicorn`；新增 `Procfile`（`gunicorn "app:create_app()" --bind 0.0.0.0:$PORT`）、`runtime.txt`（python-3.12.7）、`render.yaml`（Blueprint，密钥类 env 设 `sync:false` 不入库）。本地 `create_app()` 启动自检通过（24 路由 + DB 初始化 OK）。无 API Key 时跑 demo 模式（人格测试 + 界面可用，AI 行程需后续在控制台填 `LLM_API_KEY`/`DOUBAO_API_KEY`）。视频解析依赖 ffmpeg/douyin-mcp，PaaS 上会优雅降级，不影响启动。
+**在哪改的：** `requirements.txt`、`Procfile`、`runtime.txt`、`render.yaml`（均仓库根目录）。
+**状态：** 待推送；推送后由用户在 render.com 连仓库完成部署。
+
+---
+
 ## 2026-06-09 — 补修「视频分析后地图页 0 个景点」Bug
 
 **做了什么：** 在 `/api/video/analyze` 去重后、写库与 return 之前补上坐标 / 类型补全循环，使接口响应与写库用同一份已补全数据，地图页不再因 `lat/lng` 为空被前端全部过滤。详见 `debug.md` 第 3 条。

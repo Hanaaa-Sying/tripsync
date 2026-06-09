@@ -1,0 +1,29 @@
+# Render Blueprint — 一拍迹合 / TripSync 一键部署
+# 用法：登录 render.com → New + → Blueprint → 连接本仓库，Render 会自动读取本文件。
+# 带 sync:false 的环境变量需在 Render 控制台手动填入（密钥不入库）。
+services:
+  - type: web
+    name: tripsync
+    runtime: python
+    plan: free                       # Render 免费 Web Service（闲置后休眠，首次访问约 50s 唤醒）
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn "app:create_app()" --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: FLASK_DEBUG
+        value: "0"
+      # ↓↓↓ 以下为密钥/可选配置，在控制台手动填写（不填则跑 demo 模式：人格测试 + 界面可用，AI 行程不可用）
+      - key: LLM_API_KEY
+        sync: false
+      - key: LLM_BASE_URL
+        sync: false
+      - key: LLM_MODEL
+        sync: false
+      - key: DOUBAO_API_KEY
+        sync: false
+      - key: AMAP_KEY
+        sync: false
+      - key: MIMO_API_KEY
+        sync: false
