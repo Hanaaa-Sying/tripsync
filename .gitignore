@@ -21,7 +21,14 @@ venv/
 # Node
 node_modules/
 dist/
+
+# 环境变量 / 密钥（不要提交真实 key）
+.env
 .env.local
+.env.bak
+
+# mcporter 配置由 setup.sh 从 .env 自动生成（含真实 key 与本地路径，不提交）
+config/mcporter.json
 
 # Database / runtime
 instance/

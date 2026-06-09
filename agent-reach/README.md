@@ -6,13 +6,17 @@
 
 ```bash
 # 1. 克隆项目
-git clone <repo-url> && cd 黑客松
+git clone https://github.com/Hanaaa-Sying/tripsync.git && cd tripsync
 
-# 2. 一键安装（自动装 ffmpeg、uv、mcporter、xhs-cli、douyin 依赖）
+# 2. 配置密钥：复制模板并填入自己的 Key
+cp .env.example .env   # 然后编辑 .env，填 MIMO_API_KEY 等
+
+# 3. 一键安装（自动装 ffmpeg、uv、mcporter、xhs-cli、douyin 依赖）
 bash agent-reach/setup.sh
 ```
 
-`.env` 和 `config/mcporter.json` 已包含在仓库中，clone 后直接可用。
+> `.env` 与 `config/mcporter.json` 含真实密钥，**不会提交到仓库**（已在 `.gitignore` 屏蔽）。
+> `config/mcporter.json` 由 `agent-reach/setup.sh` 根据 `.env` 自动生成。
 
 如果需要更换 API Key，编辑 `.env` 中的 `MIMO_API_KEY`，然后重新运行 `bash agent-reach/setup.sh` 更新 mcporter 配置。
 

@@ -167,6 +167,14 @@ def analyze_video():
             seen.add(key)
             unique_locations.append(loc)
 
+    # 坐标/类型补全：在返回前就把 lat/lng 补齐，否则前端地图页会因坐标为空把景点全部过滤掉
+    for loc in unique_locations:
+        lat, lng = _fill_coords((loc.get("name") or "").strip(), loc.get("lat"), loc.get("lng"))
+        loc["lat"], loc["lng"] = lat, lng
+        raw_type = (loc.get("type") or "").strip().lower()
+        loc["type"] = raw_type if raw_type in ("landmark", "street", "food", "culture") \
+            else _infer_type_from_keywords(loc.get("keywords", []))
+
     logger.info(f"分析完成：{len(transcripts)}/{len(urls)} 个视频成功，提取 {len(unique_locations)} 个景点")
 
     # 持久化到数据库（作为预备默认景点）
