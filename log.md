@@ -11,6 +11,14 @@
 
 ---
 
+## 2026-06-10 — 兼容 Zeabur 部署（PORT 端口适配）
+
+**做了什么：** 为迁移到 Zeabur（香港区，国内访问更稳）做兼容。Zeabur 按 `PORT` 环境变量转发端口、默认用 `python app.py` 启动，但原 `Config.PORT` 只读 `FLASK_PORT`（默认 5000），会导致端口不匹配、服务不可达。改为优先读 `PORT`，回退 `FLASK_PORT`，再回退 5000。本地 `PORT=8080` 自检命中、`create_app()` 启动 OK。对 Render（gunicorn 直接 --bind $PORT，不走 app.run）与本地（FLASK_PORT）均无影响。
+**在哪改的：** `backend/config.py` 的 `Config.PORT`。
+**状态：** 待推送；推送后用户在 Zeabur 连仓库、选香港区部署。
+
+---
+
 ## 2026-06-09 — 接入 Render 公网部署配置
 
 **做了什么：** 为公网部署（Render 免费 Web Service）补齐配置：`requirements.txt` 加 `gunicorn`；新增 `Procfile`（`gunicorn "app:create_app()" --bind 0.0.0.0:$PORT`）、`runtime.txt`（python-3.12.7）、`render.yaml`（Blueprint，密钥类 env 设 `sync:false` 不入库）。本地 `create_app()` 启动自检通过（24 路由 + DB 初始化 OK）。无 API Key 时跑 demo 模式（人格测试 + 界面可用，AI 行程需后续在控制台填 `LLM_API_KEY`/`DOUBAO_API_KEY`）。视频解析依赖 ffmpeg/douyin-mcp，PaaS 上会优雅降级，不影响启动。

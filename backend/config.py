@@ -23,7 +23,8 @@ class Config:
 
     # Flask
     DEBUG = os.getenv("FLASK_DEBUG", "0") == "1"
-    PORT = int(os.getenv("FLASK_PORT", "5000"))
+    # 端口：优先读 PORT（Zeabur/Render 等 PaaS 注入），回退 FLASK_PORT（本地），再回退 5000
+    PORT = int(os.getenv("PORT") or os.getenv("FLASK_PORT") or "5000")
 
     # LLM
     LLM_API_KEY = os.getenv("LLM_API_KEY", "")
